@@ -1,16 +1,18 @@
-
+import pytest
+from faker import Faker
 from playwright.sync_api import Page
-from components import signup 
+from components import signup, login
 
+fake = Faker()
 
 @pytest.fixture
 def test_user(page: Page):
-    email = "Test User"
-    password = "StrongPass123!"
-    fullname = "Test User"
+    fullname=fake.name()
+    email=fake.email()
+    password=fake.email()
 
     # регистрация через UI
-    signup.open_login(page)
+    login.open_login(page)
     signup.go_to_signup(page)
     signup.register(
         page,
@@ -20,4 +22,4 @@ def test_user(page: Page):
     )
     signup.assert_registered(page)
 
-    return {"email": email, "password": password}
+    yield {"email": email, "password": password}

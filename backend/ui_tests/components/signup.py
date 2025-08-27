@@ -1,12 +1,8 @@
 from playwright.sync_api import Page, expect
-import re
-
-def open_login(page: Page):
-    page.goto("/login") 
 
 def go_to_signup(page: Page):
     page.get_by_role("link", name="Sign Up").click()
-    expect(page).to_have_url("/signup")
+    expect(page).to_have_url("http://localhost:5173/signup")
 
 def register(page: Page, fullname: str, email: str, password: str):
     page.get_by_placeholder("Full Name").fill(fullname)
@@ -16,4 +12,4 @@ def register(page: Page, fullname: str, email: str, password: str):
     page.get_by_role("button", name="Sign Up").click()
 
 def assert_registered(page: Page):
-    page.to_have_url("**/login")
+    expect(page).to_have_url("http://localhost:5173/login")
