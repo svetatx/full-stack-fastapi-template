@@ -5,13 +5,9 @@ fake = Faker()
 
 def test_user_can_register(page: Page):
     login.open_login(page)
-    # Step 2: нажать Sign Up
     signup.go_to_signup(page)
-    # Step 3: fill registration
-    signup.register(page,
-        fullname="Test User",
-        email= fake.unique.email(),
-        password="StrongPass123!"
-    )
-    # Step 4: check succesfull registartion
+    fullname = fake.name()
+    email = fake.email() 
+    password = fake.password()
+    signup.register(page, fullname=fullname, email=email, password=password)
     signup.assert_registered(page)
