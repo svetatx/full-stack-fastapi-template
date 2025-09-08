@@ -3,6 +3,10 @@ from components.delete_user import DeleteUser
 from components.login import LoginForm
 from components.signup import SignUpForm
 from faker import Faker
+import allure
+from typing import Generator, Any
+from allure_commons.reporter import AllureReporter
+from allure_pytest.listener import AllureListener
 from playwright.sync_api import Browser, Page
 from testing.utils.client import Client
 from testing.utils.configuration import Configuration
@@ -106,9 +110,23 @@ def page(browser: Browser):
         base_url="http://localhost:5173", viewport={"width": 1920, "height": 1080}
     )
     page = context.new_page()
+
     yield page
+
     page.close()
     context.close()
+
+
+@pytest.fixture(scope="function", autouse=True)
+def add_screenshot(page: Page, request: pytest.FixtureRequest):
+    yield
+
+    screenshot = page.screenshot()
+    allure.attach(
+        screenshot,
+        name=f"screenshot_{request.node.name}",
+        attachment_type=allure.attachment_type.PNG,
+    )
 
 
 @pytest.fixture
@@ -155,3 +173,26 @@ def authorize_user_by_ui(
 ):
     login.open()
     login.as_user(created_user.email, created_user.password)
+
+
+def allure_logger(config: pytest.Config) -> AllureReporter:
+    listener: AllureListener = config.pluginmanager.get_plugin("allure_listener")
+    return listener.allure_logger
+
+
+@pytest.hookimpl(hookwrapper=True, trylast=True)
+def pytest_fixture_setup(
+    fixturedef, request: pytest.FixtureRequest
+) -> Generator[None, Any, None]:
+    yield
+    logger: AllureReporter = allure_logger(request.config)
+    item: pytest.Item = logger.get_last_item()
+    scope_letter = fixturedef.scope[0].upper()
+    item.name = f"[{scope_letter}] " + " ".join(fixturedef.argname.split("_")).title()
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo) -> None:
+    if call.when == "call":
+        test_name = item.name.replace("test_", "").replace("_", " ").capitalize()
+        allure.dynamic.title(test_name)
