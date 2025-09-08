@@ -5,7 +5,12 @@ from httpx import URL
 
 class Configuration:
     def __init__(
-        self, *, base_url: URL | str = "", disable_log: bool = False, **kwargs: Any
+        self,
+        *,
+        base_url: URL | str = "",
+        disable_log: bool = False,
+        disable_allure_log: bool = False,
+        **kwargs: Any,
     ) -> None:
         """
         Parameters:
@@ -62,4 +67,5 @@ class Configuration:
         """
         self.base_url = base_url
         self.disable_log = disable_log
+        self.disable_allure_log = disable_allure_log
         self.kwargs = kwargs

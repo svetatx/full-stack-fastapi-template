@@ -12,6 +12,7 @@ __pycache__/
 .env
 venv/
 .venv/
+.ruff_cache/
 
 # Playwright
 playwright-report/
