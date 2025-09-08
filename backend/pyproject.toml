@@ -13,7 +13,7 @@ dependencies = [
     "emails<1.0,>=0.6",
     "jinja2<4.0.0,>=3.1.4",
     "alembic<2.0.0,>=1.12.1",
-    "httpx<1.0.0,>=0.25.1",
+    "httpx>=0.25.1,<1.0.0",
     "sqlmodel<1.0.0,>=0.0.21",
     # Pin bcrypt until passlib supports the latest
     "bcrypt==4.3.0",
@@ -23,16 +23,19 @@ dependencies = [
     "pytest-playwright>=0.7.0",
     "faker>=37.6.0",
     "psycopg>=3.2.9",
+    "structlog>=25.4.0",
+    "curlify2>=2.0.0",
+    "allure-pytest>=2.15.0",
 ]
 
 [tool.uv]
 dev-dependencies = [
     "pytest<8.0.0,>=7.4.3",
     "mypy<2.0.0,>=1.8.0",
-    "ruff<1.0.0,>=0.2.2",
     "pre-commit<4.0.0,>=3.6.2",
     "types-passlib<2.0.0.0,>=1.7.7.20240106",
     "coverage<8.0.0,>=7.4.3",
+    "ruff>=0.12.12",
 ]
 
 [build-system]
@@ -47,24 +50,9 @@ exclude = ["venv", ".venv", "alembic"]
 target-version = "py310"
 exclude = ["alembic"]
 
-[tool.ruff.lint]
-select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "I",  # isort
-    "B",  # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "UP",  # pyupgrade
-    "ARG001", # unused arguments in functions
+[tool.pytest.ini_options]
+addopts = "-s -vv --alluredir=allure-results --clean-alluredir"
+testpaths = [
+    "tests",
+    "integration",
 ]
-ignore = [
-    "E501",  # line too long, handled by black
-    "B008",  # do not perform function calls in argument defaults
-    "W191",  # indentation contains tabs
-    "B904",  # Allow raising exceptions without from e, for HTTPException
-]
-
-[tool.ruff.lint.pyupgrade]
-# Preserve types, even if a file imports `from __future__ import annotations`.
-keep-runtime-typing = true

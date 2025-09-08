@@ -18,6 +18,3 @@ class SignUpForm:
 
     def assert_registered(self):
         expect(self.page).to_have_url("/login")
-
-
-        

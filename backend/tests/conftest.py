@@ -1,27 +1,110 @@
 import pytest
+from components.delete_user import DeleteUser
+from components.login import LoginForm
+from components.signup import SignUpForm
 from faker import Faker
 from playwright.sync_api import Browser, Page
-from pydantic import BaseModel
-from components.login import LoginForm
-from components.delete_user import DeleteUser
-from components.signup import SignUpForm
+from utils.client import Client
+from utils.configuration import Configuration
+from clients.users import UsersClient, UserRegister
+from clients.login import LoginClient, UserAccessToken
 
 
 # tammy76@example.com
 # Heather Snow
 
-# uv run pytest --headed --slowmo 300 
+# uv run pytest --headed --slowmo 300
 
 
-class User(BaseModel):
-    fullname: str
-    email: str
-    password: str
+# API
+@pytest.fixture
+def unauth_configuration():
+    return Configuration(
+        base_url="http://127.0.0.1:8000",
+        # headers={"Authorization": f"Bearer {API_KEY}"},
+    )
+
+
+@pytest.fixture
+def unauth_client(unauth_configuration):
+    return Client(configuration=unauth_configuration)
+
+
+@pytest.fixture
+def login_client(unauth_client) -> LoginClient:
+    return LoginClient(unauth_client)
+
+
+@pytest.fixture
+def unauth_users_client(unauth_client: Client) -> UsersClient:
+    return UsersClient(unauth_client)
+
+
+@pytest.fixture
+def created_user(faker: Faker) -> UserRegister:
+    return UserRegister(
+        fullname=faker.name(), email=faker.email(), password=faker.name()
+    )
+
+
+@pytest.fixture
+def register_user_by_api(
+    faker: Faker,
+    unauth_users_client: UsersClient,
+    created_user: UserRegister,
+):
+    unauth_users_client.register_user(
+        UserRegister(
+            fullname=created_user.fullname,
+            email=created_user.email,
+            password=created_user.password,
+        )
+    )
+
+
+@pytest.fixture
+def get_access_token(
+    login_client: LoginClient, created_user, register_user_by_api
+) -> dict:
+    return login_client.get_access_token(
+        user=UserAccessToken(
+            username=created_user.email, password=created_user.password
+        )
+    ).json()
+
+
+@pytest.fixture
+def auth_configuration(get_access_token):
+    return Configuration(
+        base_url="http://127.0.0.1:8000",
+        headers={"Authorization": f"Bearer {get_access_token['access_token']}"},
+    )
+
+
+@pytest.fixture
+def auth_client(auth_configuration):
+    return Client(configuration=auth_configuration)
+
+
+@pytest.fixture
+def auth_users_client(auth_client) -> UsersClient:
+    return UsersClient(auth_client)
+
+
+@pytest.fixture
+def delete_user_by_api(auth_users_client: UsersClient):
+    yield
+    auth_users_client.delete_me()
+
+
+# UI
 
 
 @pytest.fixture(autouse=True)
 def page(browser: Browser):
-    context = browser.new_context(base_url="http://localhost:5173", viewport={"width": 1920, "height": 1080})
+    context = browser.new_context(
+        base_url="http://localhost:5173", viewport={"width": 1920, "height": 1080}
+    )
     page = context.new_page()
     yield page
     page.close()
@@ -44,13 +127,11 @@ def delete_user(page: Page) -> DeleteUser:
 
 
 @pytest.fixture
-def created_user(faker: Faker) -> User:
-    return User(fullname=faker.name(), email=faker.email(), password=faker.name())
-
-
-@pytest.fixture
-def register_user(
-    created_user: User, signup: SignUpForm, login: LoginForm, delete_user: DeleteUser
+def register_user_by_ui(
+    created_user: UserRegister,
+    signup: SignUpForm,
+    login: LoginForm,
+    delete_user: DeleteUser,
 ):
     login.open()
     signup.go_to_signup()
@@ -69,6 +150,8 @@ def register_user(
 
 
 @pytest.fixture
-def authorize_user(login: LoginForm, signup: SignUpForm, created_user: User):
+def authorize_user_by_ui(
+    login: LoginForm, signup: SignUpForm, created_user: UserRegister
+):
     login.open()
     login.as_user(created_user.email, created_user.password)

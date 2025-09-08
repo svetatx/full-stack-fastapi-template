@@ -16,7 +16,6 @@ class DeleteUser:
         self.page.get_by_role("button", name="Delete").click()
         expect(self.page.locator('//*[text()="Confirmation Required"]')).to_be_visible()
         self.page.locator('(//*[text()="Delete"])[2]').click()
-        
 
     def login_page(self):
-        expect(page).to_have_url("/login")
+        expect(self.page).to_have_url("/login")
