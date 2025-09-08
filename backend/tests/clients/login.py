@@ -1,4 +1,4 @@
-from utils.client import Client
+from testing.utils.client import Client
 from pydantic import BaseModel
 
 

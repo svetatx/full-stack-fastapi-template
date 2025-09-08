@@ -4,8 +4,8 @@ from components.login import LoginForm
 from components.signup import SignUpForm
 from faker import Faker
 from playwright.sync_api import Browser, Page
-from utils.client import Client
-from utils.configuration import Configuration
+from testing.utils.client import Client
+from testing.utils.configuration import Configuration
 from clients.users import UsersClient, UserRegister
 from clients.login import LoginClient, UserAccessToken
 
