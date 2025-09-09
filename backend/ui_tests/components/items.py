@@ -21,3 +21,10 @@ def expect_title_required_error(page: Page):
 
 def expect_item_visible(page: Page, title: str):
     expect(page.get_by_text(title)).to_be_visible()
+
+def open_row_menu(page: Page):
+    page.locator('button[data-scope="menu"][data-part="trigger"]').click()
+    expect(page.get_by_role("menu")).to_be_visible()
+
+def delete_item(page: Page):
+    page.get_by_role("menu", name="Delete item").click()
