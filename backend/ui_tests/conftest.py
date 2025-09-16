@@ -1,6 +1,7 @@
 import pytest
+from random import randint
 from faker import Faker
-from playwright.sync_api import Page
+from playwright.sync_api import Page, Browser
 from components import signup, login,delete_user, items
 BASE_URL = "http://localhost:5173"
 fake = Faker()
@@ -14,9 +15,9 @@ def page_baseurl(browser: Browser):
     context.close()
     
 @pytest.fixture
-def sugnup_user(page: Page):
+def signup_user(page: Page):
     fullname=fake.name()
-    email=fake.email()
+    email= str(randint(1,100)) + fake.email()
     password=fake.email()
     login.open_login(page)
     signup.go_to_signup(page)
