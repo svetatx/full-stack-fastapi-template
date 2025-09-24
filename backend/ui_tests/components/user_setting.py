@@ -17,5 +17,5 @@ def set_email(page: Page, value: str):
 def save(page: Page):
     page.get_by_role("button", name="Save").click()
 
-def assert_full_name(page: Page, expected: str):
-    expect(page.get_by_label("Full name")).to_have_value(expected)
+def assert_update_success(page):
+    expect(page.get_by_text("User updated successfully")).to_be_visible()

@@ -7,8 +7,9 @@ BASE_URL = "http://localhost:5173"
 fake = Faker()
  
 @pytest.fixture
-def page_baseurl(browser: Browser):
+def page(browser: Browser):
     context = browser.new_context(base_url=BASE_URL)
+    context.set_default_timeout(4000)
     page = context.new_page()
     yield page
     page.close()

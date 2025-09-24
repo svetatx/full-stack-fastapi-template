@@ -1,7 +1,7 @@
 from playwright.sync_api import Page, expect
 
 def open_settings(page: Page):
-    page.locator('a[href="/settings"]').click()
+    page.locator('(//*[text()="User Settings"])[1]').click()
 #     expect(page.get_by_role("heading", name="User Settings")).to_be_visible()
 
 def open_danger_zone(page: Page):
