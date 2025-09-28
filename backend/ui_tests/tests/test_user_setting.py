@@ -22,5 +22,5 @@ def test_update_user(page: Page, signup_user):
     user_setting.edit_profile(page)
     user_setting.set_full_name(page, "testUser3")
     user_setting.save(page)
-    user_setting.open_my_profile(page)
     user_setting.assert_update_success(page)
+    user_setting.open_my_profile(page)
