@@ -1,0 +1,17 @@
+import requests
+
+BASE_URL = "https://reqres.in/api"
+
+def test_get_users():
+    resp = requests.get(f"{BASE_URL}/users?page=2")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "data" in data
+    assert isinstance(data["data"], list)
+
+def test_create_user():
+    new_user = {"name": "morpheus", "job": "leader"}
+    resp = requests.post(f"{BASE_URL}/users", json=new_user)
+    assert resp.status_code == 201
+    body = resp.json()
+    assert body["name"] == "morpheus"
