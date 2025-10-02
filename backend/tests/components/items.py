@@ -9,7 +9,7 @@ def open_add_modal(page : Page):
     page.get_by_role("button", name="Add Item").click()
     expect(page.get_by_role("heading", name="Add Item")).to_be_visible()
 
-def fill_item_form(page: Page, title: str, description: str = ""):
+def fill_item_form(page: Page, title: str, description: str):
     page.get_by_placeholder("Title").fill(title)
     page.get_by_placeholder("Description").fill(description)
 
@@ -26,5 +26,5 @@ def open_row_menu(page: Page):
     page.locator('button[data-scope="menu"][data-part="trigger"]').click()
     expect(page.get_by_role("menu")).to_be_visible()
 
-def delete_item(page: Page):
-    page.get_by_role("menu", name="Delete item").click()
+# def delete_item(page: Page):
+#     page.get_by_role("menu", name="Delete item").click()
