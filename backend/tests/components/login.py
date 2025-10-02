@@ -1,7 +1,7 @@
 from playwright.sync_api import Page, expect
 
 def open_login(page: Page):
-    page.goto("http://localhost:5173/")
+    page.goto("/")
 
 def login(page: Page, email: str, password: str):  
     open_login(page)
@@ -10,4 +10,4 @@ def login(page: Page, email: str, password: str):
     page.get_by_role("button", name="Log in").click()  
 
 def expect_logged_in(page: Page):
-    expect(page).to_have_url("http://localhost:5173/")
+    expect(page).to_have_url("/")

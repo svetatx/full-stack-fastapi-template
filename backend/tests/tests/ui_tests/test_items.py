@@ -8,4 +8,3 @@ def test_add_item(page: Page, signup_user ):
     items.fill_item_form(page, title="title item", description=" ")
     items.save_item(page)
     items.open_row_menu(page)
-    # items.delete_item(page)
