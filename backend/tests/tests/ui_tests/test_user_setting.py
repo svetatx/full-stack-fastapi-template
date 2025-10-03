@@ -4,7 +4,7 @@ from faker import Faker
 fake = Faker()
 
 def test_user_can_register(page: Page):
-    login.open_login(page)
+    login.open(page)
     signup.go_to_signup(page)
     fullname = fake.name()
     email = fake.email() 
@@ -13,10 +13,10 @@ def test_user_can_register(page: Page):
     signup.assert_registered(page)
 
 def test_login_with_test_user(page: Page, signup_user):
-    login.login(page, signup_user["email"], signup_user["password"])
+    login.as_user(page, signup_user["email"], signup_user["password"])
 
 def test_update_user(page: Page, signup_user):
-    login.login(page, signup_user["email"], signup_user["password"])
+    login.as_user(page, signup_user["email"], signup_user["password"])
     delete_user.open_settings(page)
     user_setting.open_my_profile(page)
     user_setting.edit_profile(page)
