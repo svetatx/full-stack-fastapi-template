@@ -14,3 +14,10 @@ def register_user(email: str, password: str, full_name: str):
             "full_name": full_name},
         expected_status=200
     )
+
+def get_user_by_id(user_id: str):
+    return api_request(
+        endpoint="users/",
+        method="Get",
+        expected_status=200
+    )
