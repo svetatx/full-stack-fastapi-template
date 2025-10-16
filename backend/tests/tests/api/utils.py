@@ -55,33 +55,34 @@ def response_attaching (response: Response):
 def api_request(
     endpoint,
     method,
-    base_api_url="http://127.0.0.1:8000",
+    base_api_url="http://127.0.0.1:8000/api/v1",
     data=None,
     params=None,
     json=None,
     headers=None,
     expected_status=None
-):
 
+) -> dict:
 # Устанавливаем expected_status по умолчанию в зависимости от метода
+# 
    if expected_status is None:
        if method. lower() == 'get':
            expected_status = 200
        elif method. lower() == 'post':
            expected_status = 201
 
-    url = f"{base_api_url}{endpoint}"
-    response = requests.request(
-        method, url, data=data, params=params, json=json, headers=headers
+   url = f"{base_api_url}{endpoint}"
+   response = requests.request(
+       method, url, data=data, params=params, json=json, headers=headers
 )
 
-    response_logging (response)
-    response_attaching (response)
+   response_logging (response)
+   response_attaching (response)
 
 # Проверяем expected
-    assert response.status_code == expected_status, (
+   assert response.status_code == expected_status, (
         f"Expected status {expected_status}, but got {response.status_code}."
         f"Response: {response.text}"
 )
 # Возвращаем response.json()
-    return response. json()
+   return response. json()

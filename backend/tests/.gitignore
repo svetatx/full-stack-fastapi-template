@@ -16,4 +16,4 @@ venv/
 # Playwright
 playwright-report/
 test-results/
-allure-results
+allure-results/

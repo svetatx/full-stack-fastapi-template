@@ -9,7 +9,25 @@ import pytest
 import allure
 
 BASE_URL = "http://localhost:5173"
+
 fake = Faker()
+@pytest.fixture
+def signup_user(request, page: Page):
+    fullname = fake.name()
+    email = f"{randint(1, 100)}{fake.email()}"
+    password = fake.password()
+
+    login.open(page)
+    signup.go_to_signup(page)
+    signup.register(page, fullname=fullname, email=email, password=password)
+    signup.assert_registered(page)
+
+    yield {"fullname": fullname, "email": email, "password": password, "deleted": False}
+
+    if not "no_user_cleanup" in request.keywords:
+        delete_user.open_settings(page)
+        delete_user.open_danger_zone(page)
+        delete_user.delete_account(page)
 
 @pytest.fixture
 def page(new_context: BrowserContext):
