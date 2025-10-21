@@ -1,4 +1,5 @@
 from api.utils import api_request
+from http import HTTPMethod, HTTPStatus
 
 BASE_URL = "http://127.0.0.1:8000"
 
@@ -17,7 +18,7 @@ def register_user(email: str, password: str, full_name: str):
 
 def get_user_by_id(user_id: str):
     return api_request(
-        endpoint="users/",
-        method="Get",
-        expected_status=200
+        endpoint="/users/{user_id}",
+        method=HTTPMethod.GET,
+        expected_status=HTTPStatus.OK,
     )
