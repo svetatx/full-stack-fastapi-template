@@ -11,6 +11,8 @@ import allure
 BASE_URL = "http://localhost:5173"
 
 fake = Faker()
+
+
 @pytest.fixture
 def signup_user(request, page: Page):
     fullname = fake.name()
@@ -28,6 +30,7 @@ def signup_user(request, page: Page):
         delete_user.open_settings(page)
         delete_user.open_danger_zone(page)
         delete_user.delete_account(page)
+
 
 @pytest.fixture
 def page(new_context: BrowserContext):
