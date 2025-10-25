@@ -21,3 +21,10 @@ def get_user_by_id(user_id: str, headers):
         expected_status=HTTPStatus.OK,
         headers=headers,
     )
+def read_users(headers=None):
+    return api_request(
+        endpoint="/users",
+        method=HTTPMethod.GET,
+        expected_status=HTTPStatus.OK,
+        headers=headers,
+    )
