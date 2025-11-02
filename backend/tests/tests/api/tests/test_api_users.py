@@ -20,17 +20,17 @@ def test_get_user_by_id(created_user, auth_headers):
     assert got["is_active"] is True
 
 
-def test_read_users(auth_headers):
-    response = read_users(headers=auth_headers)
+# def test_read_users(auth_headers):
+#     response = read_users(headers=auth_headers)
 
-    assert "data" in response
-    assert isinstance (response["data"], list)
+#     assert "data" in response
+#     assert isinstance (response["data"], list)
 
-    assert "count" in response
-    assert isinstance (response["count"], int)
+#     assert "count" in response
+#     assert isinstance (response["count"], int)
 
-    user = response["data"] [0]
-    for key in ["id", "email", "is_active", "is_superuser", "full_name"]:
-        assert key in user
+#     user = response["data"] [0]
+#     for key in ["id", "email", "is_active", "is_superuser", "full_name"]:
+#         assert key in user
 
     

@@ -38,3 +38,10 @@ def created_user(user_payload):
     data = register_user(**user_payload)
     assert data.get("is_active") is True
     return data  # ожидаем ключи: id, email, full_name, is_active
+
+@pytest.fixture()
+def item_payload():
+    return {
+        "title": f"demo_item_{''.join(random.choices(string.ascii_lowercase, k=5))}",
+        "description": "created from API test",
+    }
