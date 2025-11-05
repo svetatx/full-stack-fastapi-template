@@ -1,4 +1,4 @@
-from api.clients.items import ItemsClient
+from clients.items import ItemsClient
 from random import randint
 
 
@@ -17,7 +17,6 @@ def test_get_item_by_id(item_payload, items_authenticated_api_client: ItemsClien
         title=item_payload["title"],
         description=item_payload["description"],
     )
-
     # достаём этот же item по id
     item_id = created_item["id"]
     got = items_authenticated_api_client.get_item_by_id(item_id)

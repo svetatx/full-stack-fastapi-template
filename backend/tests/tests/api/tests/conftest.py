@@ -5,8 +5,8 @@ from http import HTTPStatus
 from utils import APIClient
 from clients.users import UsersClient
 from clients.items import ItemsClient
-from api.clients.users import register_user  # твой клиент
-from api.utils import api_request  # общий helper для HTTP
+from clients.users import register_user  # твой клиент
+from utils import api_request  # общий helper для HTTP
 
 @pytest.fixture
 def api_client() -> APIClient:
