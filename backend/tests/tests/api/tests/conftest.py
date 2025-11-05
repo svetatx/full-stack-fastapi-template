@@ -2,8 +2,33 @@ import random
 import string
 import pytest
 from http import HTTPStatus
+from utils import APIClient
+from clients.users import UsersClient
+from clients.items import ItemsClient
 from api.clients.users import register_user  # твой клиент
 from api.utils import api_request  # общий helper для HTTP
+
+@pytest.fixture
+def api_client() -> APIClient:
+    return APIClient(base_url="http://127.0.0.1:8000/api/v1")
+
+@pytest.fixture
+def authenticated_api_client(auth_headers) -> APIClient:
+    return APIClient(
+        base_url="http://127.0.0.1:8000/api/v1", default_headers=auth_headers
+    )
+
+@pytest.fixture
+def users_api_client(api_client) -> UsersClient:
+    return UsersClient(api_client)
+
+@pytest.fixture 
+def users_authenticated_api_client(authenticated_api_client) -> UsersClient:
+    return UsersClient(authenticated_api_client)
+
+@pytest.fixture 
+def items_authenticated_api_client(authenticated_api_client) -> ItemsClient:
+    return ItemsClient(authenticated_api_client)
 
 
 def _rand_email(prefix="sveta"):
@@ -20,10 +45,9 @@ def user_payload():
 
 
 @pytest.fixture()
-def auth_headers(user_payload):
-    got = api_request(
+def auth_headers(created_user, api_client: APIClient, user_payload):
+    got = api_client.post(
         endpoint="/login/access-token",
-        method="POST",
         data={
             "username": user_payload["email"],
             "password": user_payload["password"],

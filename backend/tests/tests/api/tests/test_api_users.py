@@ -1,4 +1,4 @@
-from api.clients.users import register_user, get_user_by_id, read_users
+from api.clients.users import register_user, get_user_by_id
 from random import randint
 
 
