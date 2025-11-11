@@ -43,7 +43,6 @@ def user_payload():
         "full_name": "qa_user",
     }
 
-
 @pytest.fixture()
 def auth_headers(created_user, api_client: APIClient, user_payload):
     got = api_client.post(
