@@ -26,18 +26,6 @@ def test_get_item_by_id(item_payload, items_authenticated_api_client: ItemsClien
     assert got["title"] == item_payload["title"]
     assert got["description"] == item_payload["description"]
 
-def test_get_item_by_id(item_payload, items_authenticated_api_client: ItemsClient):
-    created = items_authenticated_api_client.create_item(
-        title=item_payload["title"],
-        description=item_payload["description"],
-    )
-
-    got = items_authenticated_api_client.get_item_by_id(created["id"])
-
-    assert got["id"] == created["id"]
-    assert got["title"] == item_payload["title"]
-    assert got["description"] == item_payload["description"]
-
 def test_update_item(item_payload, items_authenticated_api_client: ItemsClient):
     # создаём item
     created = items_authenticated_api_client.create_item(
